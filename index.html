@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cultural Catch-Up: American & British Friends</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Burger King Colors */
+        :root {
+            --bk-red: #D62300;
+            --bk-yellow: #FFC72C;
+            --bk-dark-blue: #0C345A;
+            --bk-white: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bk-dark-blue); /* Dark blue background */
+            color: var(--bk-white);
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bk-dark-blue);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--bk-red);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--bk-yellow);
+        }
+
+        /* Custom classes for Burger King palette */
+        .bg-bk-red { background-color: var(--bk-red); }
+        .text-bk-red { color: var(--bk-red); }
+        .bg-bk-yellow { background-color: var(--bk-yellow); }
+        .text-bk-yellow { color: var(--bk-yellow); }
+        .bg-bk-dark-blue { background-color: var(--bk-dark-blue); }
+        .text-bk-dark-blue { color: var(--bk-dark-blue); }
+        .bg-bk-white { background-color: var(--bk-white); }
+        .text-bk-white { color: var(--bk-white); }
+
+        /* Highlighted word styling */
+        .highlighted-word {
+            color: var(--bk-yellow);
+            text-decoration: underline;
+            text-decoration-color: var(--bk-yellow);
+            cursor: pointer;
+            position: relative;
+            font-weight: 500;
+        }
+
+        /* Explanation box styling (for hover) */
+        .explanation-box {
+            position: absolute;
+            background-color: var(--bk-yellow);
+            color: var(--bk-dark-blue);
+            padding: 1rem;
+            border-radius: 0.75rem; /* rounded-lg */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+            z-index: 50; /* Higher than other content */
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out, visibility 0.3s ease-out;
+            min-width: 250px; /* Ensure it's wide enough */
+            max-width: 300px;
+            font-size: 0.875rem; /* text-sm */
+            line-height: 1.4;
+            left: 50%; /* Center relative to the word */
+            transform: translateX(-50%) translateY(10px); /* Adjust for centering */
+            top: 100%; /* Position below the word */
+            white-space: normal; /* Allow text to wrap */
+        }
+
+        .explanation-box.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .explanation-box p {
+            margin-bottom: 0.5rem;
+        }
+
+        .explanation-box strong {
+            color: var(--bk-red); /* Highlight word in explanation */
+        }
+
+        /* Card specific styles for Netflix-like effect */
+        .card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            background: linear-gradient(145deg, rgba(var(--bk-red-rgb), 0.8), rgba(var(--bk-red-rgb), 0.6));
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.4);
+            z-index: 10;
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.2); /* Dark overlay */
+            z-index: 1;
+            transition: background 0.2s ease-in-out;
+        }
+
+        .card:hover::before {
+            background: rgba(0, 0, 0, 0); /* Remove overlay on hover */
+        }
+
+        /* Responsive grid for cards */
+        @media (min-width: 640px) {
+            .card-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 768px) {
+            .card-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .card-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        /* Speaker styling */
+        .speaker-jake {
+            color: var(--bk-yellow);
+            font-weight: 600;
+        }
+
+        .speaker-emily {
+            color: var(--bk-white);
+            font-weight: 600;
+        }
+
+        /* Burger King RGB values for gradients */
+        .bg-bk-red-rgb { --bk-red-rgb: 214, 35, 0; }
+
+        /* Vocabulary summary section styling */
+        .vocabulary-summary {
+            background-color: rgba(var(--bk-red-rgb), 0.2); /* Semi-transparent red */
+            border: 1px solid var(--bk-red);
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            margin-top: 2rem;
+        }
+
+        .vocabulary-summary h3 {
+            color: var(--bk-yellow);
+            font-size: 1.75rem; /* text-2xl */
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .vocabulary-item {
+            background-color: rgba(var(--bk-red-rgb), 0.4);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.75rem;
+            border-left: 4px solid var(--bk-yellow);
+        }
+
+        .vocabulary-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .vocabulary-item strong {
+            color: var(--bk-yellow);
+            font-size: 1.125rem; /* text-lg */
+            margin-bottom: 0.25rem;
+            display: block;
+        }
+
+        .vocabulary-item p {
+            font-size: 0.95rem;
+            line-height: 1.4;
+            margin-bottom: 0.25rem;
+        }
+
+        .vocabulary-item .example {
+            font-style: italic;
+            color: rgba(var(--bk-white-rgb), 0.9); /* Slightly lighter white */
+        }
+
+        .vocabulary-item .portuguese {
+            font-weight: 500;
+            color: var(--bk-white);
+        }
+        .bg-bk-white-rgb { --bk-white-rgb: 255, 255, 255; }
+
+        /* Drag and Drop Game Styles */
+        #drag-drop-game-view {
+            background-color: rgba(var(--bk-red-rgb), 0.2);
+            border: 2px solid var(--bk-yellow);
+            padding: 2rem;
+            border-radius: 1rem;
+            width: 100%;
+            max-width: 1000px;
+            margin-top: 2rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .draggable-words-container, .drop-targets-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            padding: 1rem;
+            background-color: rgba(0,0,0,0.2);
+            border-radius: 0.75rem;
+            min-height: 150px;
+            align-items: center;
+            justify-items: center;
+        }
+
+        .draggable-item {
+            background-color: var(--bk-yellow);
+            color: var(--bk-dark-blue);
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            cursor: grab;
+            font-weight: 600;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            transition: transform 0.1s ease-out, background-color 0.2s ease-in-out;
+            border: 2px solid transparent;
+        }
+
+        .draggable-item:hover {
+            transform: translateY(-3px);
+            background-color: #FFDE7A; /* Lighter yellow on hover */
+        }
+
+        .draggable-item:active {
+            cursor: grabbing;
+            transform: translateY(0);
+        }
+
+        .drop-target {
+            background-color: rgba(var(--bk-white-rgb), 0.1);
+            color: var(--bk-white);
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            border: 2px dashed var(--bk-yellow);
+            text-align: center;
+            min-height: 100px; /* Ensure enough space for content */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.9rem;
+            line-height: 1.3;
+            transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+            position: relative; /* For dropped word positioning */
+        }
+
+        .drop-target.hovered {
+            background-color: rgba(var(--bk-yellow-rgb), 0.2); /* Lighter yellow for hover */
+            border-color: var(--bk-yellow);
+        }
+
+        .drop-target.correct {
+            background-color: rgba(0, 255, 0, 0.2); /* Green */
+            border-color: green;
+        }
+
+        .drop-target.incorrect {
+            background-color: rgba(255, 0, 0, 0.2); /* Red */
+            border-color: red;
+        }
+
+        .dropped-word {
+            background-color: var(--bk-yellow);
+            color: var(--bk-dark-blue);
+            padding: 0.4rem 0.8rem;
+            border-radius: 0.4rem;
+            font-weight: 600;
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            font-size: 0.8rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .game-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .game-buttons button {
+            background-color: var(--bk-red);
+            color: var(--bk-white);
+            padding: 0.8rem 1.8rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            box-shadow: 0 6px 10px rgba(0,0,0,0.2);
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-out;
+            border: none;
+            cursor: pointer;
+        }
+
+        .game-buttons button:hover {
+            background-color: var(--bk-yellow);
+            color: var(--bk-dark-blue);
+            transform: translateY(-2px);
+        }
+
+        .feedback-message {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            min-height: 30px; /* Reserve space */
+        }
+        .feedback-message.correct-text {
+            color: #4CAF50; /* Green */
+        }
+        .feedback-message.incorrect-text {
+            color: #F44336; /* Red */
+        }
+        .bk-yellow-rgb { --bk-yellow-rgb: 255, 199, 44; }
+    </style>
+</head>
+<body class="bg-bk-dark-blue text-bk-white min-h-screen flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
+
+    <!-- Header -->
+    <header class="w-full max-w-6xl text-center mb-12">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-bk-yellow drop-shadow-lg mb-4">
+            Cultural Catch-Up
+        </h1>
+        <p class="text-xl sm:text-2xl text-bk-white font-light">
+            American & British Friends: An Interactive Conversation
+        </p>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="w-full max-w-6xl flex flex-col items-center">
+
+        <!-- Conversation Sections Grid (Netflix-like) -->
+        <section id="conversation-cards" class="card-grid grid grid-cols-1 gap-6 w-full mb-12">
+            <!-- Cards will be injected here by JavaScript -->
+        </section>
+
+        <!-- New Play Game Button -->
+        <button id="play-game-button" class="bg-bk-yellow text-bk-dark-blue px-8 py-4 rounded-full shadow-lg hover:bg-bk-red hover:text-bk-white transition-colors duration-200 text-xl font-bold mb-12">
+            Play Vocabulary Game!
+        </button>
+
+        <!-- Detailed Conversation View -->
+        <section id="detailed-conversation-view" class="w-full hidden bg-bk-dark-blue p-6 sm:p-8 lg:p-10 rounded-xl shadow-2xl border-2 border-bk-red relative">
+            <button id="back-button-conversation" class="absolute top-4 left-4 bg-bk-red text-bk-white px-4 py-2 rounded-full shadow-md hover:bg-bk-yellow hover:text-bk-dark-blue transition-colors duration-200 text-sm font-semibold">
+                &larr; Back to Sections
+            </button>
+            <h2 id="detailed-title" class="text-3xl sm:text-4xl font-bold text-bk-yellow text-center mb-6 mt-10"></h2>
+            <p id="detailed-summary" class="text-lg text-bk-white text-center mb-8"></p>
+            <div id="dialogue-content" class="space-y-4 text-lg mb-8">
+                <!-- Dialogue will be injected here by JavaScript -->
+            </div>
+
+            <!-- New Vocabulary Summary Section -->
+            <div id="vocabulary-summary" class="vocabulary-summary hidden">
+                <h3>Vocabulary for this Section</h3>
+                <div id="vocabulary-list" class="space-y-3">
+                    <!-- Vocabulary items will be injected here -->
+                </div>
+            </div>
+
+            <!-- Explanation Box (hidden by default) -->
+            <div id="explanation-box" class="explanation-box">
+                <p class="font-bold text-base mb-1" id="exp-word"></p>
+                <p class="text-sm" id="exp-explanation"></p>
+                <p class="text-sm italic" id="exp-example"></p>
+                <p class="text-sm font-medium" id="exp-portuguese"></p>
+            </div>
+        </section>
+
+        <!-- Drag and Drop Game Section -->
+        <section id="drag-drop-game-view" class="hidden">
+            <button id="back-button-game" class="absolute top-4 left-4 bg-bk-red text-bk-white px-4 py-2 rounded-full shadow-md hover:bg-bk-yellow hover:text-bk-dark-blue transition-colors duration-200 text-sm font-semibold">
+                &larr; Back to Main
+            </button>
+            <h2 class="text-3xl sm:text-4xl font-bold text-bk-yellow text-center mb-8 mt-10">
+                Drag & Drop Vocabulary Challenge!
+            </h2>
+            <p class="text-lg text-bk-white text-center mb-8">
+                Drag each yellow word to its correct definition/translation box.
+            </p>
+
+            <div class="flex flex-col lg:flex-row gap-8 w-full">
+                <div class="lg:w-1/2">
+                    <h3 class="text-2xl font-semibold text-bk-yellow mb-4 text-center">Words</h3>
+                    <div id="draggable-words-container" class="draggable-words-container">
+                        <!-- Draggable words will be injected here -->
+                    </div>
+                </div>
+                <div class="lg:w-1/2">
+                    <h3 class="text-2xl font-semibold text-bk-yellow mb-4 text-center">Definitions & Translations</h3>
+                    <div id="drop-targets-container" class="drop-targets-container">
+                        <!-- Drop targets will be injected here -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="feedback-message" id="game-feedback"></div>
+
+            <div class="game-buttons">
+                <button id="check-answers-button">Check Answers</button>
+                <button id="reset-game-button">Reset Game</button>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Data for word explanations and conversation sections
+        const wordExplanations = {
+            "catch up": {
+                explanation: "To talk and share news after time apart.",
+                example: "Example: We caught up over lunch yesterday.",
+                secondExample: "Example 2: Let's catch up next week for coffee.",
+                portuguese: "Português: colocar a conversa em dia"
+            },
+            "in person": {
+                explanation: "Meeting face-to-face, not by phone or online.",
+                example: "Example: We met in person at the library.",
+                secondExample: "Example 2: It's always better to discuss sensitive topics in person.",
+                portuguese: "Português: pessoalmente"
+            },
+            "vibe": {
+                explanation: "The atmosphere or feeling of a place.",
+                example: "Example: This restaurant has a cozy vibe.",
+                secondExample: "Example 2: I love the relaxed vibe of this café.",
+                portuguese: "Português: ambiente/sentimento"
+            },
+            "quaint": {
+                explanation: "Charming in an old-fashioned way.",
+                example: "Example: A quaint village with cobblestone streets.",
+                secondExample: "Example 2: The small, quaint shop sold handmade crafts.",
+                portuguese: "Português: pitoresco"
+            },
+            "independent cafés": {
+                explanation: "Small, privately owned coffee shops.",
+                example: "Example: I like independent cafés more than chains.",
+                secondExample: "Example 2: Supporting independent cafés helps local businesses.",
+                portuguese: "Português: cafeterias independentes"
+            },
+            "chains": {
+                explanation: "Large companies with many stores or restaurants.",
+                example: "Example: Starbucks is a famous coffee chain.",
+                secondExample: "Example 2: Many small businesses struggle to compete with big chains.",
+                portuguese: "Português: rede (de lojas ou restaurantes)"
+            },
+            "atmosphere": {
+                explanation: "The mood or feeling of a place.",
+                example: "Example: The calm atmosphere made studying easy.",
+                secondExample: "Example 2: The party had a lively atmosphere.",
+                portuguese: "Português: atmosfera"
+            },
+            "treating you": {
+                explanation: "How life or a place is affecting you.",
+                example: "Example: The city is treating me well so far.",
+                secondExample: "Example 2: How's your new job treating you?",
+                portuguese: "Português: tratando você / tratando bem"
+            },
+            "rare": {
+                explanation: "Not common or unusual.",
+                example: "Example: Snow in summer is rare here.",
+                secondExample: "Example 2: It's rare to find such a quiet spot in the city.",
+                portuguese: "Português: raro"
+            },
+            "pleasant": {
+                explanation: "Nice and enjoyable.",
+                example: "Example: We had a pleasant walk in the park.",
+                secondExample: "Example 2: The weather was pleasant for an outdoor picnic.",
+                portuguese: "Português: agradável"
+            },
+            "heat wave": {
+                explanation: "A period of very hot weather.",
+                example: "Example: The heat wave lasted five days straight.",
+                secondExample: "Example 2: We stayed indoors during the intense heat wave.",
+                portuguese: "Português: onda de calor"
+            },
+            "iced coffee": {
+                explanation: "Coffee served cold, often with ice cubes.",
+                example: "Example: Iced coffee is refreshing on hot days.",
+                secondExample: "Example 2: She prefers iced coffee even in winter.",
+                portuguese: "Português: café gelado"
+            },
+            "proper": {
+                explanation: "Genuine or typical.",
+                example: "Example: A proper meal usually has three courses.",
+                secondExample: "Example 2: He learned how to make a proper English breakfast.",
+                portuguese: "Português: verdadeiro, típico"
+            },
+            "chilled": {
+                explanation: "Made cold or cooled down.",
+                example: "Example: Chilled lemonade is perfect for summer.",
+                secondExample: "Example 2: Serve the wine well chilled for the best taste.",
+                portuguese: "Português: gelado, resfriado"
+            },
+            "flavored syrup": {
+                explanation: "Sweet liquid used to add tastes to drinks.",
+                example: "Example: Vanilla syrup makes coffee sweet and tasty.",
+                secondExample: "Example 2: You can add raspberry flavored syrup to your soda.",
+                portuguese: "Português: xarope aromatizado"
+            },
+            "no-nonsense": {
+                explanation: "Practical and serious, without unnecessary things.",
+                example: "Example: She has a no-nonsense attitude at work.",
+                secondExample: "Example 2: His no-nonsense approach helped solve the problem quickly.",
+                portuguese: "Português: sem rodeios/prático"
+            },
+            "strict": {
+                explanation: "Following rules exactly.",
+                example: "Example: My teacher is strict about homework deadlines.",
+                secondExample: "Example 2: The library has a strict policy on late returns.",
+                portuguese: "Português: rigoroso"
+            },
+            "holy grail": {
+                explanation: "Something greatly valued or sought after.",
+                example: "Example: For runners, winning a marathon is a holy grail.",
+                secondExample: "Example 2: Finding a cure for the disease was the scientist's holy grail.",
+                portuguese: "Português: santo graal"
+            },
+            "purist": {
+                explanation: "Someone who wants to keep things traditional.",
+                example: "Example: A purist prefers classical music without modern influence.",
+                secondExample: "Example 2: As a coffee purist, she only drinks black coffee.",
+                portuguese: "Português: purista"
+            },
+            "splash": {
+                explanation: "A small amount of liquid added.",
+                example: "Example: Add a splash of lemon to your tea.",
+                secondExample: "Example 2: Just a splash of milk, please.",
+                portuguese: "Português: um pouco, um pingo"
+            },
+            "whipped cream": {
+                explanation: "Sweet cream beaten until fluffy.",
+                example: "Example: Pie tastes better with whipped cream on top.",
+                secondExample: "Example 2: She topped her hot chocolate with a generous dollop of whipped cream.",
+                portuguese: "Português: chantili"
+            },
+            "guilty as charged": {
+                explanation: "Admitting responsibility humorously.",
+                example: "Example: Guilty as charged—I ate all the cookies.",
+                secondExample: "Example 2: You say I'm addicted to reading? Guilty as charged!",
+                portuguese: "Português: confesso, pego no ato"
+            },
+            "variety": {
+                explanation: "Having many different types or options.",
+                example: "Example: The buffet offers a variety of dishes.",
+                secondExample: "Example 2: Eating a variety of fruits and vegetables is healthy.",
+                portuguese: "Português: variedade"
+            },
+            "full spread": {
+                explanation: "A large, complete meal with many items.",
+                example: "Example: Thanksgiving dinner has a full spread of food.",
+                secondExample: "Example 2: They prepared a full spread for the birthday party.",
+                portuguese: "Português: banquete completo"
+            },
+            "buffet": {
+                explanation: "A meal where people serve themselves from many dishes.",
+                example: "Example: The hotel offers a breakfast buffet every morning.",
+                secondExample: "Example 2: I love all-you-can-eat buffets.",
+                portuguese: "Português: buffet/self-service"
+            },
+            "glorious": {
+                explanation: "Wonderful and impressive.",
+                example: "Example: The sunset was glorious with bright colors.",
+                secondExample: "Example 2: We had a glorious time at the beach.",
+                portuguese: "Português: glorioso/magnífico"
+            },
+            "overwhelming": {
+                explanation: "Too much to handle comfortably.",
+                example: "Example: The loud noise was overwhelming after working all day.",
+                secondExample: "Example 2: The amount of information was overwhelming.",
+                portuguese: "Português: sobrecarregado/assustador"
+            },
+            "classic": {
+                explanation: "Typical and well-known.",
+                example: "Example: Pizza is a classic Italian food.",
+                secondExample: "Example 2: That song is a classic rock anthem.",
+                portuguese: "Português: clássico"
+            },
+            "big deal": {
+                explanation: "Very important.",
+                example: "Example: Graduation day is a big deal for students.",
+                secondExample: "Example 2: Getting into college was a big deal for him.",
+                portuguese: "Português: coisa importante"
+            },
+            "crispy": {
+                explanation: "Crunchy texture when cooked.",
+                example: "Example: I love crispy fried chicken.",
+                secondExample: "Example 2: The crispy bacon was delicious.",
+                portuguese: "Português: crocante"
+            },
+            "Sunday roast": {
+                explanation: "Traditional British meal eaten on Sundays.",
+                example: "Example: Family gathers for Sunday roast every weekend.",
+                secondExample: "Example 2: We're having lamb for Sunday roast this week.",
+                portuguese: "Português: roast de domingo (refeição tradicional)"
+            },
+            "Yorkshire pudding": {
+                explanation: "A baked batter side dish, soft inside.",
+                example: "Example: Yorkshire pudding goes well with gravy and meat.",
+                secondExample: "Example 2: My grandma makes the best Yorkshire pudding.",
+                portuguese: "Português: pudim de Yorkshire (prato britânico)"
+            },
+            "gravy": {
+                explanation: "Thick sauce made from meat juices.",
+                example: "Example: Pour gravy on mashed potatoes.",
+                secondExample: "Example 2: The turkey was served with cranberry sauce and gravy.",
+                portuguese: "Português: molho da carne"
+            },
+            "hearty": {
+                explanation: "Filling and satisfying food.",
+                example: "Example: Soup was warm and hearty on the cold day.",
+                secondExample: "Example 2: A hearty breakfast will keep you full until lunch.",
+                portuguese: "Português: substancioso"
+            },
+            "wondered": {
+                explanation: "Thought about or was curious about something.",
+                example: "Example: I wondered how they made that cake.",
+                secondExample: "Example 2: She wondered if he would ever call her back.",
+                portuguese: "Português: perguntava-se, fiquei com dúvida"
+            },
+            "signature dish": {
+                explanation: "A meal someone cooks very well or often.",
+                example: "Example: Her signature dish is homemade lasagna.",
+                secondExample: "Example 2: The chef's signature dish was a spicy seafood pasta.",
+                portuguese: "Português: prato especial, assinatura"
+            },
+            "from scratch": {
+                explanation: "Made from basic ingredients, no shortcuts.",
+                example: "Example: Mom bakes bread from scratch every Sunday.",
+                secondExample: "Example 2: Learning to code from scratch can be challenging but rewarding.",
+                portuguese: "Português: do zero"
+            },
+            "fancy": {
+                explanation: "Elaborate or expensive.",
+                example: "Example: He wore a fancy suit to the party.",
+                secondExample: "Example 2: They went to a fancy restaurant for their anniversary.",
+                portuguese: "Português: chique, sofisticado"
+            },
+            "patties": {
+                explanation: "Flattened pieces of ground meat for burgers.",
+                example: "Example: The burger patty was juicy and tasty.",
+                secondExample: "Example 2: We grilled chicken patties for dinner.",
+                portuguese: "Português: hambúrguer (bolo de carne)"
+            },
+            "toppings": {
+                explanation: "Items added on top of food for flavor.",
+                example: "Example: I like adding cheese and tomato as burger toppings.",
+                secondExample: "Example 2: Pizza toppings can include pepperoni, mushrooms, and olives.",
+                portuguese: "Português: coberturas"
+            },
+            "gourmet": {
+                explanation: "High-quality and often fancy food.",
+                example: "Example: Gourmet chocolates cost more but taste amazing.",
+                secondExample: "Example 2: The city has many gourmet food trucks.",
+                portuguese: "Português: gourmet (de alta qualidade)"
+            },
+            "popping up": {
+                explanation: "Appearing suddenly in many places.",
+                example: "Example: New shops are popping up downtown.",
+                secondExample: "Example 2: Coffee shops are popping up on every corner.",
+                portuguese: "Português: surgindo de repente"
+            },
+            "evolve": {
+                explanation: "To develop or change over time.",
+                example: "Example: Language evolves with new words.",
+                secondExample: "Example 2: Technology continues to evolve rapidly.",
+                portuguese: "Português: evoluir"
+            },
+            "connect": {
+                explanation: "To build a relationship or understanding.",
+                example: "Example: We connected instantly at the party.",
+                secondExample: "Example 2: Social media helps people connect with friends globally.",
+                portuguese: "Português: conectar, criar laços"
+            },
+            "bridge cultures": {
+                explanation: "To connect or bring together different cultures.",
+                example: "Example: Music can bridge gaps between cultures.",
+                secondExample: "Example 2: International exchange programs help bridge cultures.",
+                portuguese: "Português: ligar, aproximar culturas"
+            },
+            "picked up": {
+                explanation: "Learned or started doing something new.",
+                example: "Example: I picked up some French while traveling.",
+                secondExample: "Example 2: She picked up a new hobby during the lockdown.",
+                portuguese: "Português: aprender, pegar (hábito)"
+            },
+            "gulping": {
+                explanation: "Drinking quickly or in big mouthfuls.",
+                example: "Example: He was gulping water after running.",
+                secondExample: "Example 2: Don't gulp your food; chew it slowly.",
+                portuguese: "Português: engolir de uma vez"
+            },
+            "endless": {
+                explanation: "Without stopping or limit.",
+                example: "Example: Endless meetings can be very tiring.",
+                secondExample: "Example 2: The desert seemed to stretch for endless miles.",
+                portuguese: "Português: infinito, sem fim"
+            },
+            "queuing": {
+                explanation: "Waiting in line.",
+                example: "Example: We were queuing for tickets.",
+                secondExample: "Example 2: Queuing for the concert started hours before the show.",
+                portuguese: "Português: fila"
+            },
+            "politely": {
+                explanation: "With good manners and respect.",
+                example: "Example: She politely said “please” and “thank you.”",
+                secondExample: "Example 2: Always respond politely to customer inquiries.",
+                portuguese: "Português: educadamente"
+            },
+            "challenge": {
+                explanation: "Something difficult to do.",
+                example: "Example: Learning a new language is a challenge.",
+                secondExample: "Example 2: Climbing that mountain was a real challenge.",
+                portuguese: "Português: desafio"
+            },
+            "legendary": {
+                explanation: "Very famous and admired.",
+                example: "Example: The legendary singer still inspires many.",
+                secondExample: "Example 2: King Arthur is a legendary figure in British history.",
+                portuguese: "Português: lendário"
+            },
+            "art form": {
+                explanation: "Something done with skill and style.",
+                example: "Example: Cooking can be an art form.",
+                secondExample: "Example 2: Ballet is a beautiful art form.",
+                portuguese: "Português: forma de arte"
+            },
+            "hiya": {
+                explanation: "Informal way to say “hi.”",
+                example: "Example: Hiya! Long time no see.",
+                secondExample: "Example 2: Hiya, how are you doing today?",
+                portuguese: "Português: oi (informal)"
+            },
+            "casual": {
+                explanation: "Informal, relaxed.",
+                example: "Example: Casual clothes are fine for weekends.",
+                secondExample: "Example 2: We had a casual chat over coffee.",
+                portuguese: "Português: informal"
+            },
+            "gotta": {
+                explanation: "Slang for “got to” meaning “have to.”",
+                example: "Example: I gotta leave soon.",
+                secondExample: "Example 2: I gotta finish this report by tomorrow.",
+                portuguese: "Português: tenho que (gíria)"
+            },
+            "mark": {
+                explanation: "To show or identify something.",
+                example: "Example: His accent marks him as Scottish.",
+                secondExample: "Example 2: The scar on his hand marks him from a childhood accident.",
+                portuguese: "Português: marcar, identificar"
+            },
+            "sense of space": {
+                explanation: "Feeling of open, wide areas.",
+                example: "Example: The park has a great sense of space.",
+                secondExample: "Example 2: The architect designed the room to give a sense of space.",
+                portuguese: "Português: sensação de espaço"
+            },
+            "brilliant": {
+                explanation: "Excellent or wonderful.",
+                example: "Example: That movie was brilliant!",
+                secondExample: "Example 2: She had a brilliant idea for the project.",
+                portuguese: "Português: brilhante, excelente"
+            },
+            "cramped": {
+                explanation: "Too small and crowded.",
+                example: "Example: The apartment felt cramped with all the furniture.",
+                secondExample: "Example 2: The train carriage was cramped during rush hour.",
+                portuguese: "Português: apertado, pequeno"
+            },
+            "countryside": {
+                explanation: "Rural areas outside cities.",
+                example: "Example: We enjoyed walking in the countryside.",
+                secondExample: "Example 2: Living in the countryside offers peace and quiet.",
+                portuguese: "Português: zona rural, campo"
+            },
+            "confined": {
+                explanation: "Limited in space.",
+                example: "Example: The small room felt confined and stuffy.",
+                secondExample: "Example 2: The animals were kept in a confined area.",
+                portuguese: "Português: confinado"
+            },
+            "vast": {
+                explanation: "Very large or extensive.",
+                example: "Example: The desert is vast and empty.",
+                secondExample: "Example 2: The ocean is a vast expanse of water.",
+                portuguese: "Português: vasto, enorme"
+            },
+            "charm": {
+                explanation: "Attractive quality.",
+                example: "Example: The old town has a special charm.",
+                secondExample: "Example 2: Her friendly personality adds to her charm.",
+                portuguese: "Português: charme"
+            },
+            "quirks": {
+                explanation: "Peculiar habits or characteristics.",
+                example: "Example: He has a few funny quirks, like always wearing mismatched socks.",
+                secondExample: "Example 2: Every family has its own unique quirks.",
+                portuguese: "Português: peculiaridades/manias"
+            },
+            "second to none": {
+                explanation: "The best, better than all others.",
+                example: "Example: Her cooking skills are second to none.",
+                secondExample: "Example 2: The hotel's customer service is second to none.",
+                portuguese: "Português: incomparável, o melhor"
+            },
+            "blew my mind": {
+                explanation: "Amazed me a lot.",
+                example: "Example: That magic trick blew my mind.",
+                secondExample: "Example 2: The concert's special effects blew my mind.",
+                portuguese: "Português: me surpreendeu"
+            },
+            "bucket list": {
+                explanation: "Things you want to do before you die.",
+                example: "Example: Visiting Paris is on my bucket list.",
+                secondExample: "Example 2: Skydiving is high on my bucket list.",
+                portuguese: "Português: lista de desejos"
+            },
+            "explore": {
+                explanation: "To travel to new places to learn about them.",
+                example: "Example: We explored the ancient ruins last summer.",
+                secondExample: "Example 2: Scientists are exploring new ways to generate energy.",
+                portuguese: "Português: explorar"
+            },
+            "pub": {
+                explanation: "A bar or tavern, common in the UK.",
+                example: "Example: We met friends at the local pub.",
+                secondExample: "Example 2: Many pubs in London have a long history.",
+                portuguese: "Português: pub, bar"
+            },
+            "pub culture": {
+                explanation: "Traditions and social habits around pubs.",
+                example: "Example: Pub culture includes meeting friends and enjoying drinks.",
+                secondExample: "Example 2: Understanding pub culture is key to experiencing British social life.",
+                portuguese: "Português: cultura dos pubs"
+            },
+            "quiz nights": {
+                explanation: "Trivia games in pubs.",
+                example: "Example: Quiz nights are popular events on Fridays.",
+                secondExample: "Example 2: Our team always wins at the local pub quiz nights.",
+                portuguese: "Português: noite de quiz/trivia"
+            },
+            "ales": {
+                explanation: "Types of beer, often darker and flavorful.",
+                example: "Example: He enjoys a pint of ale after work.",
+                secondExample: "Example 2: The brewery offers a variety of craft ales.",
+                portuguese: "Português: ales (tipos de cerveja)"
+            },
+            "sample": {
+                explanation: "To try a small amount.",
+                example: "Example: You can sample many cheeses at the market.",
+                secondExample: "Example 2: We sampled different wines at the vineyard.",
+                portuguese: "Português: experimentar, provar"
+            },
+            "stateside": {
+                explanation: "In the USA.",
+                example: "Example: Friends stateside are always welcome to visit.",
+                secondExample: "Example 2: I'm heading stateside for the holidays.",
+                portuguese: "Português: nos Estados Unidos"
+            },
+            "barbecue": {
+                explanation: "Cooking meat outdoors over fire or smoke.",
+                example: "Example: We had a barbecue with burgers and hotdogs.",
+                secondExample: "Example 2: The smell of barbecue filled the air at the park.",
+                portuguese: "Português: churrasco"
+            },
+            "smoked ribs": {
+                explanation: "Ribs cooked slowly with smoke for flavor.",
+                example: "Example: Smoked ribs are a barbecue favorite.",
+                secondExample: "Example 2: The restaurant is famous for its tender smoked ribs.",
+                portuguese: "Português: costelas defumadas"
+            }
+        };
+
+        const conversationSections = [
+            {
+                id: "intro",
+                title: "Initial Greetings & Café Vibes",
+                summary: "Jake and Emily meet in a cozy café, discussing the atmosphere and initial pleasantries.",
+                dialogue: [
+                    { speaker: "Jake", text: "Hey Emily, it’s so great to finally catch up in person! This place has such a nice vibe, don’t you think?" },
+                    { speaker: "Emily", text: "Absolutely, Jake. It’s wonderfully quaint. I love these little independent cafés. Much better than the big chains, don’t you agree?" },
+                    { speaker: "Jake", text: "Definitely. There’s just something about the atmosphere here that’s way more relaxing. So, how’s London treating you these days?" },
+                    { speaker: "Emily", text: "Oh, it’s been good, thanks. Busy as always, but I’m really enjoying the summer weather this year — rare and quite pleasant! And you? How’s the States?" },
+                    { speaker: "Jake", text: "Pretty good! We’re starting to feel that summer heat wave here in New York, though. I’m not complaining—just makes sitting here with a nice iced coffee all the more enjoyable." }
+                ]
+            },
+            {
+                id: "drinks",
+                title: "Coffee vs. Tea Culture",
+                summary: "The friends discuss their preferred beverages, highlighting cultural differences in coffee and tea preparation.",
+                dialogue: [
+                    { speaker: "Emily", text: "Iced coffee? Now that’s something we don’t get enough of in London. I feel like a proper American must introduce me to how you drink that here." },
+                    { speaker: "Jake", text: "For sure! It’s basically your regular coffee but chilled and poured over ice, sometimes with milk or flavored syrup. Perfect for hot days. I’m curious though—how do you like your tea, Emily? I imagine a Brit’s no-nonsense approach to tea is quite strict." },
+                    { speaker: "Emily", text: "Oh, the holy grail of tea! I’m a bit of a purist. Strong black tea, a splash of milk, maybe a touch of sugar. No fancy syrup nonsense! But I do find it amusing that Americans often add all sorts of flavors and whipped cream." },
+                    { speaker: "Jake", text: "Haha, guilty as charged. We do like our pumpkin spice lattes and caramel macchiatos. But hey, variety is the spice of life, right? Speaking of which, have you ever tried American breakfast? Pancakes, bacon, eggs — the full spread?" }
+                ]
+            },
+            {
+                id: "food",
+                title: "Breakfast & Dinner Delights",
+                summary: "Jake and Emily share their experiences with American breakfast and British traditional meals like fish and chips and Sunday roast.",
+                dialogue: [
+                    { speaker: "Emily", text: "Yes, I have! Last time I visited, the hotel served a massive American breakfast buffet. It was glorious, if a bit overwhelming. So much food on one plate!" },
+                    { speaker: "Jake", text: "That’s classic. Breakfast is indeed a big deal here, especially on weekends. What about British food, any favorites you recommend I try?" },
+                    { speaker: "Emily", text: "Definitely fish and chips—traditional, crispy, and usually wrapped in paper. And don’t forget the Sunday roast, with roast beef, Yorkshire pudding, and plenty of gravy. It’s a hearty meal that really hits the spot." },
+                    { speaker: "Jake", text: "I’ve heard about Yorkshire pudding and always wondered about it. It sounds amazing, especially with the gravy. Maybe next time you visit, you could show me how to make it?" },
+                    { speaker: "Emily", text: "I’d love to! Cooking together sounds like fun. What’s your signature dish?" },
+                    { speaker: "Jake", text: "I’m pretty good at making burgers from scratch. Nothing fancy, but a good burger with homemade patties and toppings is always a winner." },
+                    { speaker: "Emily", text: "Burgers are a big hit here too, especially with all the gourmet burger places popping up. It's interesting how food cultures mix and evolve, isn’t it?" }
+                ]
+            },
+            {
+                id: "habits",
+                title: "Cultural Habits & Quirks",
+                summary: "The conversation shifts to cultural habits and quirks, including queuing and casual greetings, and what they miss about their home countries.",
+                dialogue: [
+                    { speaker: "Jake", text: "Very much so. It’s one of the things I love about traveling—you get to experience how people live and eat differently but still connect over meals." },
+                    { speaker: "Emily", text: "Absolutely. Food is such a great way to bridge cultures. Have you picked up any British habits since you’ve been here?" },
+                    { speaker: "Jake", text: "I’m trying! I’ve started enjoying a proper cup of tea in the afternoon rather than just gulping endless coffee. Also, I’m getting used to queuing politely—which is a bit of a challenge back home." },
+                    { speaker: "Emily", text: "Ah, the legendary British queue! It’s an art form, really. And here I am trying to understand the many ways Americans say “hello,” like “Hey,” “Hiya,” “What’s up?”" },
+                    { speaker: "Jake", text: "Yeah, we’ve got a lot of casual greetings. Sometimes I think we use “like” too much in conversation though — gotta watch that." },
+                    { speaker: "Emily", text: "Laughs I’ve definitely noticed that. It’s funny how little things like that can mark where someone’s from. So, what do you miss most about America?" },
+                    { speaker: "Jake", text: "Hmm, tough question. I guess I miss the sense of space — the big skies, wide roads, and all that room to breathe. London’s brilliant but a bit cramped sometimes." },
+                    { speaker: "Emily", text: "I get that. The countryside here can feel quite confined compared to the vast American landscapes. But London has its charm—so much history and culture packed into a relatively small area." }
+                ]
+            },
+            {
+                id: "travel",
+                title: "Travel & Future Plans",
+                summary: "The friends discuss travel destinations, British cultural experiences, and future plans for sharing their respective cultures.",
+                dialogue: [
+                    { speaker: "Jake", text: "True. And the museums here are second to none. The British Museum blew my mind last time I visited." },
+                    { speaker: "Emily", text: "It’s one of my favorite places in the city. I’m glad you liked it! Any other places on your British bucket list?" },
+                    { speaker: "Jake", text: "Well, I’d love to explore more of the countryside—maybe the Lake District or Cotswolds. Also, experiencing a proper English pub night sounds fun." },
+                    { speaker: "Emily", text: "Oh, you must! The pub culture is so rich here, with quiz nights, live music, and plenty of ales to sample." },
+                    { speaker: "Jake", text: "Sounds like a plan. Next time you’re stateside, I’ll take you to a real American barbecue. You haven’t lived until you’ve tried smoked ribs." },
+                    { speaker: "Emily", text: "I’m looking forward to that! There’s so much to share between our two cultures. I’m glad we had this catch-up." },
+                    { speaker: "Jake", text: "Me too, Emily. It’s these kind of conversations over coffee that make friendships across the pond really special." }
+                ]
+            }
+        ];
+
+        const conversationCardsContainer = document.getElementById('conversation-cards');
+        const detailedConversationView = document.getElementById('detailed-conversation-view');
+        const detailedTitle = document.getElementById('detailed-title');
+        const detailedSummary = document.getElementById('detailed-summary');
+        const dialogueContent = document.getElementById('dialogue-content');
+        const backButtonConversation = document.getElementById('back-button-conversation');
+        const explanationBox = document.getElementById('explanation-box');
+        const expWord = document.getElementById('exp-word');
+        const expExplanation = document.getElementById('exp-explanation');
+        const expExample = document.getElementById('exp-example');
+        const expPortuguese = document.getElementById('exp-portuguese');
+        const vocabularySummarySection = document.getElementById('vocabulary-summary');
+        const vocabularyList = document.getElementById('vocabulary-list');
+
+        // Game elements
+        const playButton = document.getElementById('play-game-button');
+        const dragDropGameView = document.getElementById('drag-drop-game-view');
+        const backButtonGame = document.getElementById('back-button-game');
+        const draggableWordsContainer = document.getElementById('draggable-words-container');
+        const dropTargetsContainer = document.getElementById('drop-targets-container');
+        const checkAnswersButton = document.getElementById('check-answers-button');
+        const resetGameButton = document.getElementById('reset-game-button');
+        const gameFeedback = document.getElementById('game-feedback');
+
+        let draggedItem = null; // To store the currently dragged word
+
+        // Function to create a conversation card
+        function createConversationCard(section) {
+            const card = document.createElement('div');
+            card.id = `card-${section.id}`;
+            card.className = 'card bg-bk-red-rgb bg-opacity-80 text-bk-white rounded-xl shadow-xl p-6 flex flex-col justify-between items-start transition-transform duration-200 hover:scale-105 cursor-pointer border-b-4 border-bk-yellow'; // Added border-b
+            card.innerHTML = `
+                <div class="card-content">
+                    <h3 class="text-xl font-semibold mb-2">${section.title}</h3>
+                    <p class="text-sm opacity-90">${section.summary}</p>
+                </div>
+            `;
+            card.addEventListener('click', () => showDetailedConversation(section.id));
+            return card;
+        }
+
+        // Function to render all conversation cards
+        function renderMainView() {
+            conversationCardsContainer.innerHTML = ''; // Clear previous cards
+            conversationSections.forEach(section => {
+                conversationCardsContainer.appendChild(createConversationCard(section));
+            });
+            conversationCardsContainer.classList.remove('hidden');
+            playButton.classList.remove('hidden'); // Show play game button
+            detailedConversationView.classList.add('hidden');
+            vocabularySummarySection.classList.add('hidden');
+            dragDropGameView.classList.add('hidden'); // Ensure game view is hidden
+        }
+
+        // Function to highlight words in a text
+        function highlightWords(text) {
+            let processedText = text;
+            for (const wordKey in wordExplanations) {
+                // Create a regex to find the word, case-insensitive, and handle punctuation
+                // Use word boundaries (\b) to match whole words, but be careful with phrases
+                const escapedWordKey = wordKey.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // Escape special characters
+                const regex = new RegExp(`\\b(${escapedWordKey})\\b`, 'gi'); // 'gi' for global and case-insensitive
+
+                processedText = processedText.replace(regex, (match) => {
+                    // Check if the matched word (match.toLowerCase()) exists in our explanations
+                    // This ensures we don't highlight partial words or words that aren't in our list
+                    if (wordExplanations[match.toLowerCase()]) {
+                        return `<span class="highlighted-word" data-word="${match.toLowerCase()}">${match}</span>`;
+                    }
+                    return match; // Return original match if not in our list
+                });
+            }
+            return processedText;
+        }
+
+        // Function to show detailed conversation
+        function showDetailedConversation(sectionId) {
+            const section = conversationSections.find(s => s.id === sectionId);
+            if (!section) return;
+
+            detailedTitle.textContent = section.title;
+            detailedSummary.textContent = section.summary;
+            dialogueContent.innerHTML = ''; // Clear previous dialogue
+            vocabularyList.innerHTML = ''; // Clear previous vocabulary list
+
+            const uniqueWordsInSection = new Set();
+
+            section.dialogue.forEach(line => {
+                const p = document.createElement('p');
+                const speakerClass = line.speaker.toLowerCase() === 'jake' ? 'speaker-jake' : 'speaker-emily';
+                const highlightedLine = highlightWords(line.text);
+                p.innerHTML = `<span class="${speakerClass}">${line.speaker}:</span> ${highlightedLine}`;
+                dialogueContent.appendChild(p);
+
+                // Extract unique highlighted words for the vocabulary summary
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = highlightedLine;
+                tempDiv.querySelectorAll('.highlighted-word').forEach(wordSpan => {
+                    uniqueWordsInSection.add(wordSpan.dataset.word);
+                });
+            });
+
+            // Populate vocabulary summary
+            if (uniqueWordsInSection.size > 0) {
+                vocabularySummarySection.classList.remove('hidden');
+                uniqueWordsInSection.forEach(wordKey => {
+                    const explanationData = wordExplanations[wordKey];
+                    if (explanationData) {
+                        const vocabItem = document.createElement('div');
+                        vocabItem.className = 'vocabulary-item';
+                        vocabItem.innerHTML = `
+                            <strong>${wordKey.charAt(0).toUpperCase() + wordKey.slice(1)}</strong>
+                            <p>${explanationData.explanation}</p>
+                            <p class="example">${explanationData.example}</p>
+                            <p class="example">${explanationData.secondExample}</p>
+                            <p class="portuguese">${explanationData.portuguese}</p>
+                        `;
+                        vocabularyList.appendChild(vocabItem);
+                    }
+                });
+            } else {
+                vocabularySummarySection.classList.add('hidden');
+            }
+
+
+            conversationCardsContainer.classList.add('hidden');
+            playButton.classList.add('hidden'); // Hide play game button
+            detailedConversationView.classList.remove('hidden');
+            dragDropGameView.classList.add('hidden'); // Ensure game view is hidden
+
+            // Add event listeners for highlighted words after they are rendered
+            addHighlightedWordListeners();
+        }
+
+        // Function to add event listeners to highlighted words
+        function addHighlightedWordListeners() {
+            const highlightedWords = dialogueContent.querySelectorAll('.highlighted-word');
+            highlightedWords.forEach(wordSpan => {
+                let hideTimeout; // To manage delayed hiding
+
+                wordSpan.addEventListener('mouseenter', (e) => {
+                    clearTimeout(hideTimeout); // Clear any pending hide
+                    const wordKey = e.target.dataset.word;
+                    const explanationData = wordExplanations[wordKey];
+
+                    if (explanationData) {
+                        expWord.textContent = wordKey.charAt(0).toUpperCase() + wordKey.slice(1); // Capitalize first letter
+                        expExplanation.textContent = explanationData.explanation;
+                        expExample.textContent = explanationData.example;
+                        expPortuguese.textContent = explanationData.portuguese;
+
+                        // Position the explanation box
+                        const rect = e.target.getBoundingClientRect();
+                        const viewRect = detailedConversationView.getBoundingClientRect();
+
+                        // Calculate position relative to the detailed conversation view
+                        let top = rect.bottom - viewRect.top + 10; // 10px below the word
+                        let left = rect.left - viewRect.left + (rect.width / 2); // Center horizontally
+
+                        // Adjust position if it goes off screen (simple left/right check)
+                        const boxWidth = explanationBox.offsetWidth;
+                        const containerWidth = viewRect.width;
+
+                        if (left - boxWidth / 2 < 0) { // Too far left
+                            left = boxWidth / 2 + 10; // 10px padding from left edge
+                        } else if (left + boxWidth / 2 > containerWidth) { // Too far right
+                            left = containerWidth - boxWidth / 2 - 10; // 10px padding from right edge
+                        }
+
+                        explanationBox.style.top = `${top}px`;
+                        explanationBox.style.left = `${left}px`;
+                        explanationBox.classList.add('active');
+                    }
+                });
+
+                wordSpan.addEventListener('mouseleave', () => {
+                    // Delay hiding to allow mouse to re-enter the explanation box if it moves slightly
+                    hideTimeout = setTimeout(() => {
+                        explanationBox.classList.remove('active');
+                    }, 200); // 200ms delay
+                });
+
+                // Keep explanation box active if mouse enters it
+                explanationBox.addEventListener('mouseenter', () => {
+                    clearTimeout(hideTimeout);
+                });
+
+                // Hide explanation box if mouse leaves it
+                explanationBox.addEventListener('mouseleave', () => {
+                    explanationBox.classList.remove('active');
+                });
+            });
+        }
+
+        // --- Drag and Drop Game Logic ---
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function renderDragDropGame() {
+            conversationCardsContainer.classList.add('hidden');
+            playButton.classList.add('hidden');
+            detailedConversationView.classList.add('hidden');
+            dragDropGameView.classList.remove('hidden');
+
+            draggableWordsContainer.innerHTML = '';
+            dropTargetsContainer.innerHTML = '';
+            gameFeedback.textContent = '';
+            gameFeedback.className = 'feedback-message'; // Reset classes
+
+            const allWords = Object.keys(wordExplanations);
+            const shuffledWords = shuffleArray([...allWords]); // Create a copy and shuffle
+
+            const dropTargetsData = shuffleArray([...allWords].map(word => ({
+                word: word,
+                display: `${wordExplanations[word].explanation} (${wordExplanations[word].portuguese.replace('Português: ', '')})`
+            })));
+
+            // Create draggable word elements
+            shuffledWords.forEach(word => {
+                const wordElement = document.createElement('div');
+                wordElement.className = 'draggable-item';
+                wordElement.textContent = word.charAt(0).toUpperCase() + word.slice(1);
+                wordElement.setAttribute('draggable', true);
+                wordElement.dataset.word = word; // Store the original word key
+                wordElement.addEventListener('dragstart', handleDragStart);
+                draggableWordsContainer.appendChild(wordElement);
+            });
+
+            // Create drop target elements
+            dropTargetsData.forEach(target => {
+                const targetElement = document.createElement('div');
+                targetElement.className = 'drop-target';
+                targetElement.innerHTML = `<p>${target.display}</p>`;
+                targetElement.dataset.targetWord = target.word; // Store the correct word for this target
+                targetElement.addEventListener('dragover', handleDragOver);
+                targetElement.addEventListener('dragleave', handleDragLeave);
+                targetElement.addEventListener('drop', handleDrop);
+                dropTargetsContainer.appendChild(targetElement);
+            });
+        }
+
+        function handleDragStart(e) {
+            draggedItem = e.target;
+            e.dataTransfer.setData('text/plain', e.target.dataset.word); // Set data for drop
+            e.target.classList.add('opacity-50'); // Visual feedback for dragging
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault(); // Allow drop
+            if (e.target.classList.contains('drop-target')) {
+                e.target.classList.add('hovered');
+            }
+        }
+
+        function handleDragLeave(e) {
+            if (e.target.classList.contains('drop-target')) {
+                e.target.classList.remove('hovered');
+            }
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.target.classList.remove('hovered');
+
+            const droppedWordKey = e.dataTransfer.getData('text/plain');
+            const targetElement = e.target.closest('.drop-target'); // Ensure we get the drop target itself
+            const correctTargetWordKey = targetElement.dataset.targetWord;
+
+            // Prevent dropping if a word is already dropped here
+            if (targetElement.querySelector('.dropped-word')) {
+                gameFeedback.textContent = "This spot is already taken!";
+                gameFeedback.classList.remove('correct-text', 'incorrect-text');
+                return;
+            }
+
+            // Append the dropped word to the target visually
+            const droppedWordDisplay = draggedItem.textContent;
+            const droppedWordSpan = document.createElement('span');
+            droppedWordSpan.className = 'dropped-word';
+            droppedWordSpan.textContent = droppedWordDisplay;
+            droppedWordSpan.dataset.droppedWord = droppedWordKey; // Store the actual word key that was dropped
+
+            targetElement.appendChild(droppedWordSpan);
+
+            // Hide the original draggable item
+            draggedItem.style.display = 'none';
+
+            // Clear feedback
+            gameFeedback.textContent = '';
+            gameFeedback.classList.remove('correct-text', 'incorrect-text');
+        }
+
+        function checkAnswers() {
+            let allCorrect = true;
+            let correctCount = 0;
+            const totalTargets = dropTargetsContainer.children.length;
+
+            dropTargetsContainer.querySelectorAll('.drop-target').forEach(targetElement => {
+                const droppedWordSpan = targetElement.querySelector('.dropped-word');
+                if (droppedWordSpan) {
+                    const droppedWordKey = droppedWordSpan.dataset.droppedWord;
+                    const correctTargetWordKey = targetElement.dataset.targetWord;
+
+                    if (droppedWordKey === correctTargetWordKey) {
+                        targetElement.classList.remove('incorrect');
+                        targetElement.classList.add('correct');
+                        correctCount++;
+                    } else {
+                        targetElement.classList.remove('correct');
+                        targetElement.classList.add('incorrect');
+                        allCorrect = false;
+                    }
+                } else {
+                    // If a target has no word dropped on it, it's incorrect
+                    targetElement.classList.remove('correct');
+                    targetElement.classList.add('incorrect');
+                    allCorrect = false;
+                }
+            });
+
+            if (allCorrect) {
+                gameFeedback.textContent = `Congratulations! You got all ${correctCount} words correct!`;
+                gameFeedback.classList.remove('incorrect-text');
+                gameFeedback.classList.add('correct-text');
+            } else {
+                gameFeedback.textContent = `You got ${correctCount} out of ${totalTargets} correct. Keep trying!`;
+                gameFeedback.classList.remove('correct-text');
+                gameFeedback.classList.add('incorrect-text');
+            }
+        }
+
+        function resetGame() {
+            renderDragDropGame(); // Simply re-render the game to reset everything
+        }
+
+        // Event Listeners for navigation and game buttons
+        backButtonConversation.addEventListener('click', renderMainView);
+        playButton.addEventListener('click', renderDragDropGame);
+        backButtonGame.addEventListener('click', renderMainView);
+        checkAnswersButton.addEventListener('click', checkAnswers);
+        resetGameButton.addEventListener('click', resetGame);
+
+        // Initial render of main view when the page loads
+        document.addEventListener('DOMContentLoaded', renderMainView);
+    </script>
+</body>
+</html>
